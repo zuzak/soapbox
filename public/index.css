@@ -21,3 +21,17 @@ em {
 	font-size: 0.5em;
 	color: rgb( 101, 141, 27 ); /* light green */
 }
+
+.privacy a {
+	display:block;
+	text-align:right;
+	font-size: 0.5em;
+	padding: 1em;
+}
+.privacy {
+	font-size: 0.5em;
+	padding: 2em;
+}
+a {
+	color: gray;
+}

@@ -1,2 +1,3 @@
 node_modules
-keys.json
+keystore.json
+config.json

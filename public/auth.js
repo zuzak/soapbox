@@ -1,12 +1,17 @@
+const RED = 'rgb( 200, 16, 46 )';
+const BLU = 'rgb( 0, 94, 184 )';
+const GRN = 'rgb( 4, 106, 56 )';
+
 ( function () {
 	var slug = document.getElementById( 'slug' ).innerHTML;
 	changeStatus( 'Loaded' );
 	poll( slug, 0);
 } )();
 
-function changeStatus( str ) {
+function changeStatus( str, color ) {
 	var element = document.getElementById( 'status' );
 	element.innerHTML = str;
+	document.body.style.background = color || GRN;
 }
 
 function poll( slug, i ) {
@@ -14,15 +19,18 @@ function poll( slug, i ) {
 	getJSON( '/keys/' + slug, function ( err, res ) {
 		changeStatus( 'Waiting' +  dots( i ) );
 		if ( err ) {
-			return changeStatus( 'Error! (' + err + ')' );
+			return changeStatus( 'Error! (' + err + ')', RED );
 		}
-		if ( res !== null ) {
+		if ( res.error ) {
+			changeStatus( res.error, RED );
+		} else if ( res.ns ) {
 			// success
-			changeStatus( 'Authenticated as ' + res );
+			changeStatus( res.ns, BLU );
+			document.getElementById( 'name' ).innerHTML = res.nick;
 		} else {
 			setTimeout( function () {
 				poll( slug, i++ );
-			}, 1000 );
+			}, 2000 );
 		}
 	} );
 };
