@@ -1,0 +1,27 @@
+{
+  "name": "soapbox",
+  "version": "0.0.0",
+  "description": "voice people based on hostname",
+  "main": "server.js",
+  "scripts": {
+    "lint": "node_modules/jshint/bin/jshint *.js",
+    "mocha": "node_modules/mocha/bin/mocha test/*.js",
+    "test": "npm run lint && npm run mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/zuzak/soapbox"
+  },
+  "author": "Douglas Gardner <douglas@chippy.ch>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.3",
+    "mocha": "^3.0.2",
+    "should": "^11.1.0",
+    "supertest": "^2.0.0"
+  },
+  "private": true
+}
