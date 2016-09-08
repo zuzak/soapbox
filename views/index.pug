@@ -1,0 +1,16 @@
+extends skeleton
+block title
+	title Hello, World!
+block content
+	h1 Hello, World!
+	p Please type the following into your IRC client:
+	div.prompt
+		span &#47;msg&nbsp;
+		em #{ bot.nick }&nbsp;
+		span VERIFY&nbsp;
+		em#slug #{ slug }
+	p#status
+		- Loading
+		noscript (js disabled)
+block footer
+	script(src='auth.js')
