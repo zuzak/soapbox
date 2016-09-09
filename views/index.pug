@@ -6,7 +6,11 @@ block title
 block content
 	h1
 		span Hello,&nbsp;
-		span#name World!
+		- name = host.split( '.' )[0]
+		if name
+			span#name #{name}
+		else
+			span#name World!
 	div.auth
 		p Please type the following into your IRC client:
 		div.prompt

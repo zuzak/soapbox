@@ -1,5 +1,6 @@
 var irc = require( 'irc' );
 var storage = require( './storage' );
+var isValidHost = require( './utils' ).isValidHost;
 var bot = module.exports = new irc.Client(
 	'chat.freenode.net',
 	'myfanwy',
@@ -28,10 +29,14 @@ bot.addListener( 'pm', function ( nick, message ) {
 			bot.say( nick, 'Thanks. Return to your browser to continue.' );
 			storage.saveToDisk();
 
+			if ( isValidHost( storage.data.nicks[nick].host ) ) {
+				bot.say( nick, 'You\'re now verified. Return to your browser to continue.' );
+				bot.say( 'NickServ', 'ACC ' + nick );
+			} else {
+				bot.say( nick, 'Thanks. Return to your browser to continue.' );
+			}
+
 			bot.say( 'NickServ', 'ACC ' + nick);
-			bot.whois( nick, function ( info ) {
-				console.log( info );
-			} );
 		} else {
 			bot.say( nick, 'Your nick is already verified. You cannot be verified twice.' );
 		}
