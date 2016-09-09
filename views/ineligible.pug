@@ -1,0 +1,13 @@
+extends skeleton
+block title
+	block append css
+		link(rel='stylesheet', href='ineligible.css')
+	title Hello, World!
+block content
+	h1
+		span Hello,&nbsp;
+		span#name World!
+	div
+		p You don't have access to this service at the moment.
+		p This is because we are unable to verify your identity.
+		p Try again using a personal device on the university network.

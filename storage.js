@@ -16,5 +16,5 @@ var self = module.exports = {
 	saveToDisk: function () {
 		fs.writeFileSync( self.KEYSTORE, JSON.stringify( self.data, null, '    ' ) );
 	}
-}
+};
 self.loadFromDisk();

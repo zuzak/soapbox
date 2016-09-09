@@ -1,6 +1,7 @@
 const RED = 'rgb( 200, 16, 46 )';
 const BLU = 'rgb( 0, 94, 184 )';
 const GRN = 'rgb( 4, 106, 56 )';
+const BRN = 'rgb(121, 68, 0)';
 
 ( function () {
 	var slug = document.getElementById( 'slug' ).innerHTML;

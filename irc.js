@@ -1,8 +1,5 @@
 var irc = require( 'irc' );
-var read = require( 'fs' ).readFileSync;
 var storage = require( './storage' );
-var write = require( 'fs' ).writeFileSync;
-const KEYSTORE = 'keys.json';
 var bot = module.exports = new irc.Client(
 	'chat.freenode.net',
 	'myfanwy',
@@ -12,11 +9,14 @@ var bot = module.exports = new irc.Client(
 bot.addListener( 'pm', function ( nick, message ) {
 	var msg = message.split( ' ' );
 	if ( msg.length !== 2 ) {
-		return client.say( nick, 'Invalid command.' );
+		return bot.say( nick, 'Invalid command.' );
 	}
 
-	if ( msg[0] == 'VERIFY' ) {
+	if ( msg[0] === 'VERIFY' ) {
 		var slug = msg[1];
+		if ( !storage.data.slugs[slug] ) {
+			return bot.say( nick, 'Verification code not recognised. Please refresh and try again.' );
+		}
 		if ( !storage.data.nicks[nick] || storage.data.nicks[nick].ns !== 'VERIFIED' ) {
 			storage.data.nicks[nick] = {
 				'slug': slug,
@@ -29,6 +29,9 @@ bot.addListener( 'pm', function ( nick, message ) {
 			storage.saveToDisk();
 
 			bot.say( 'NickServ', 'ACC ' + nick);
+			bot.whois( nick, function ( info ) {
+				console.log( info );
+			} );
 		} else {
 			bot.say( nick, 'Your nick is already verified. You cannot be verified twice.' );
 		}
@@ -36,7 +39,7 @@ bot.addListener( 'pm', function ( nick, message ) {
 		bot.say( nick, 'Unknown command.' );
 	}
 } );
-bot.addListener( 'notice', function ( nick, to, text, message ) {
+bot.addListener( 'notice', function ( nick, to, text ) {
 	if ( nick === 'NickServ' && to === bot.nick ) {
 		console.log( text );
 		if ( text.indexOf( ' ACC ' ) !== -1 ) {
@@ -48,9 +51,12 @@ bot.addListener( 'notice', function ( nick, to, text, message ) {
 			console.log( data );
 			if ( data.state === '3' ) {
 				storage.data.nicks[data.nick].ns = 'VERIFIED';
+				bot.say( 'ChanServ', 'access ##zuzakistan-lab add ' + data.nick + ' +V' );
 				storage.saveToDisk();
 			} else {
-				bot.say( 'NickServ', 'INFO ' + data.nick );
+				storage.data.nicks[data.nick].ns = 'UNVERIFIED';
+				bot.say( 'ChanServ', 'voice ##zuzakistan-lab ' + data.nick );
+				storage.saveToDisk();
 			}
 		}
 	}

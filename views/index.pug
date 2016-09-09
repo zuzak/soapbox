@@ -1,4 +1,6 @@
 extends skeleton
+block append css
+	link(rel='stylesheet', href='auth.css')
 block title
 	title Hello, World!
 block content
@@ -15,8 +17,5 @@ block content
 		p#status
 			- Loading
 			noscript (js disabled)
-	div.privacy
-		p
-			a(href='/privacy') Privacy policy
-block footer
+block append footer
 	script(src='auth.js')

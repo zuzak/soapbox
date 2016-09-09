@@ -1,13 +1,18 @@
+var dns = require( 'dns' ); // core
 var express = require( 'express' );
+var minify = require( 'express-uglify' );
 var path = require( 'path' ); // core
-var read = require( 'fs' ).readFileSync;
+
+var bot = require( './irc' );
 var storage = require( './storage' );
 
 var app = module.exports = express();
-var bot = require( './irc' );
 
 app.set( 'view engine', 'pug' );
 
+app.use( minify.middleware( {
+	src: path.join( __dirname, 'public' )
+} ) );
 app.use( express.static( path.join( __dirname, 'public' ) ) );
 
 app.enable( 'trust proxy' );
@@ -23,10 +28,26 @@ app.genKey = function ( x ) {
 
 // routes
 app.get( '/', function ( req, res ) {
-	var slug = app.genKey( 5 );
-	storage.data.slugs[slug] = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'foo';
-	storage.saveToDisk();
-	res.render( 'index.pug', { bot: bot, slug: slug } );
+	if ( false) {
+		res.status( 403 ).render( 'ineligible.pug' );
+	} else {
+		var slug = app.genKey( 5 );
+		var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+		dns.reverse( ip, function ( err, hosts ) {
+			if ( err.code === 'ENOTFOUND' ) {
+				storage.data.slugs[slug] = ip;
+				return;
+			} else {
+				throw err;
+			}
+			storage.data.slugs[slug] = hosts[0];
+			return;
+		} );
+
+		// storage.data.slugs[slug] = 
+		storage.saveToDisk();
+		res.render( 'index.pug', { bot: bot, slug: slug } );
+	}
 } );
 
 app.get( '/keys/:slug', function ( req, res ) {

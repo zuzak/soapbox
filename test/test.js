@@ -11,7 +11,7 @@ describe( 'running Express.js', function () {
 } );
 
 describe( 'index page', function () {
-	it( 'should hello world', function ( done ) {
+	it( 'should work!', function ( done ) {
 		request( app )
 			.get( '/' )
 			.expect( 200 )
@@ -23,9 +23,19 @@ describe( 'index page', function () {
 } );
 
 describe( 'static pages', function () {
-	it( 'should render index.css', function ( done ) {
+	it( 'should render CSS', function ( done ) {
 		request( app )
 			.get( '/index.css' )
+			.expect( 200, done );
+	} );
+	it( 'should render JS', function ( done ) {
+		request( app )
+			.get( '/auth.js' )
+			.expect( 200, done );
+	} );
+	it( 'should render the privacy page', function ( done ) {
+		request( app )
+			.get( '/privacy' )
 			.expect( 200, done );
 	} );
 } );
