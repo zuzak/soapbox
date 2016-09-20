@@ -15,6 +15,11 @@ function changeStatus( str, color ) {
 	document.body.style.background = color || GRN;
 }
 
+function changeMessage( str ) {
+	var element = document.getElementById( 'message' );
+	element.innerHTML = str;
+}
+
 function poll( slug, i ) {
 	i++;
 	getJSON( '/keys/' + slug, function ( err, res ) {
@@ -26,6 +31,9 @@ function poll( slug, i ) {
 			changeStatus( res.error, RED );
 		} else if ( res.ns ) {
 			// success
+			if ( res.msg ) {
+				changeMessage( res.msg );
+			}
 			changeStatus( res.ns, BLU );
 			document.getElementById( 'name' ).innerHTML = res.nick;
 		} else {

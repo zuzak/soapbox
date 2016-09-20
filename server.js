@@ -55,7 +55,9 @@ app.get( '/keys/:slug', function ( req, res ) {
 	if ( !storage.data.slugs[req.params.slug] ) {
 		res.json( { error: 'invalid authentication code' } );
 	} else if ( storage.data.nicks[storage.data.slugs[req.params.slug]] ) {
-		res.json( storage.data.nicks[storage.data.slugs[req.params.slug]] );
+		var data = storage.data.nicks[storage.data.slugs[req.params.slug];
+		data.host = null; // privacy
+		res.json( data );
 	} else {
 		res.json( { error: null } );
 	}
