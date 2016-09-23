@@ -8,7 +8,7 @@ var bot = module.exports = new irc.Client(
 	require( './config.json' )
 );
 
-const CHANNEL = '##microchip08';
+const CHANNEL = '#abercs';
 
 bot.addListener( 'pm', function ( nick, message ) {
 	var msg = message.split( ' ' );
@@ -29,11 +29,9 @@ bot.addListener( 'pm', function ( nick, message ) {
 				'ns': null
 			};
 			storage.data.slugs[slug] = nick;
-			bot.say( nick, 'Thanks. Return to your browser to continue.' );
 			storage.saveToDisk();
 
 			if ( isValidHost( storage.data.nicks[nick].host ) ) {
-				bot.say( nick, 'You\'re now verified. Return to your browser to continue.' );
 				bot.say( 'NickServ', 'ACC ' + nick );
 			} else {
 				bot.say( nick, 'Thanks. Return to your browser to continue.' );
@@ -48,10 +46,10 @@ bot.addListener( 'pm', function ( nick, message ) {
 } );
 
 bot.addListener( 'notice', function ( nick, to, text ) {
+	console.log( nick, text );
 	if ( nick === 'NickServ' && to === bot.nick ) {
 		console.log( text );
 		if ( text.indexOf( ' ACC ' ) !== -1 ) {
-			console.log(text)
 			var msg = text.split( ' ' );
 			var data = {
 				nick: msg[0],
@@ -60,7 +58,7 @@ bot.addListener( 'notice', function ( nick, to, text ) {
 			console.log( data );
 			if ( data.state === '3' ) {
 				storage.data.nicks[data.nick].ns = 'VERIFIED';
-				bot.say( 'ChanServ', 'access ##zuzakistan-lab add ' + data.nick + ' +V' );
+				bot.say( 'ChanServ', 'access ' + CHANNEL + ' add ' + data.nick + ' +V' );
 				bot.say( data.nick, 'You have been added to the list of automatic voices in ' + CHANNEL + '.' );
 				bot.say( data.nick, 'To voice yourself again, just authenticate to NickServ.' );
 				storage.data.nicks[data.nick].msg = pug.renderFile('views/verified.pug', { channel: CHANNEL });
@@ -69,7 +67,11 @@ bot.addListener( 'notice', function ( nick, to, text ) {
 				storage.data.nicks[data.nick].ns = 'UNVERIFIED';
 				bot.say( 'ChanServ', 'voice ' + CHANNEL + ' ' + data.nick );
 				bot.say( data.nick, 'You have been temporarily voiced in ' + CHANNEL );
-				bot.say( data.nick, 'Register (and authenticate) with NickServ to gain permanent voice.' );
+				if ( data.state !== '0' ) {
+					bot.say( data.nick, 'Authenticate with NickServ and try again to gain permanent voice.' );
+				} else {
+					bot.say( data.nick, 'Register (and authenticate) with NickServ to gain permanent voice.' );
+				}
 				storage.data.nicks[data.nick].msg = pug.renderFile('views/unverified.pug', { channel: CHANNEL });
 				storage.saveToDisk();
 			}
