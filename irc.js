@@ -14,6 +14,7 @@ const CHANNELS = [
 ]
 
 bot.addListener('pm', function (nick, message) {
+  console.log('< ' + nick + '>', message)
   var msg = message.split(' ')
   if (msg.length !== 2) {
     return bot.say(nick, 'Invalid command.')
@@ -49,16 +50,14 @@ bot.addListener('pm', function (nick, message) {
 })
 
 bot.addListener('notice', function (nick, to, text) {
-  console.log(nick, text)
+  console.log('[ ' + nick + ']', text)
   if (nick === 'NickServ' && to === bot.nick) {
-    console.log(text)
     if (text.indexOf(' ACC ') !== -1) {
       var msg = text.split(' ')
       var data = {
         nick: msg[0],
         state: msg[2].trim()
       }
-      console.log(data)
       if (data.state === '3') {
         storage.data.nicks[data.nick].ns = 'VERIFIED'
         for (var i = 0; i > CHANNELS.length; i++) {
