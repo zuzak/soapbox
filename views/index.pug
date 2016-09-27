@@ -1,26 +1,26 @@
 extends skeleton
 block append css
-	link(rel='stylesheet', href='auth.css')
+  link(rel='stylesheet', href='auth.css')
 block title
-	title Hello, World!
+  title Hello, World!
 block content
-	h1
-		span Hello,&nbsp;
-		- name = host.split( '.' )[0]
-		if name
-			span#name #{name}
-		else
-			span#name World!
-	div.auth
-		div#message
-			p Please type the following into your IRC client:
-			div.prompt
-				span &#47;msg&nbsp;
-				em #{ bot.nick }&nbsp;
-				span VERIFY&nbsp;
-				em#slug #{ slug }
-		p#status
-			- Loading
-			noscript (js disabled)
+  h1
+    span Hello,&nbsp;
+    - name = host.split( '.' )[0]
+    if name
+      span#name #{name}
+    else
+      span#name World!
+  div.auth
+    div#message
+      p Please type the following into your IRC client:
+      div.prompt
+        span &#47;msg&nbsp;
+        em #{ bot.nick }&nbsp;
+        span VERIFY&nbsp;
+        em#slug #{ slug }
+    p#status
+      - Loading
+      noscript (js disabled)
 block append footer
-	script(src='auth.js')
+  script(src='auth.js')

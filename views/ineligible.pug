@@ -1,14 +1,14 @@
 extends skeleton
 block title
-	block append css
-		link(rel='stylesheet', href='ineligible.css')
-	title Hello, World!
+  block append css
+    link(rel='stylesheet', href='ineligible.css')
+  title Hello, World!
 block content
-	h1
-		span Hello,&nbsp;
-		span#name World!
-	div
-		p Only current students are able to be voiced using this service.
-		p We haven't been able to check that you are a student.
-		p Try again using a personal device on the university network.
-	p.debug Debug info: #{new Buffer(host).toString( 'base64' )}
+  h1
+    span Hello,&nbsp;
+    span#name World!
+  div
+    p Only current students are able to be voiced using this service.
+    p We haven't been able to check that you are a student.
+    p Try again using a personal device on the university network.
+  p.debug Debug info: #{new Buffer(host).toString( 'base64' )}
