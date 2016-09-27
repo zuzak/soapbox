@@ -1,6 +1,5 @@
 var dns = require('dns') // core
 var express = require('express')
-var minify = require('express-uglify')
 var path = require('path') // core
 var isValidHost = require('./utils').isValidHost
 
@@ -11,9 +10,6 @@ var app = module.exports = express()
 
 app.set('view engine', 'pug')
 
-app.use(minify.middleware({
-  src: path.join(__dirname, 'public')
-}))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.enable('trust proxy')
