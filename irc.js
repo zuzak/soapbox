@@ -60,7 +60,7 @@ bot.addListener('notice', function (nick, to, text) {
       }
       if (data.state === '3') {
         storage.data.nicks[data.nick].ns = 'VERIFIED'
-        for (var i = 0; i > CHANNELS.length; i++) {
+        for (var i = 0; i < CHANNELS.length; i++) {
           bot.say('ChanServ', 'access ' + CHANNELS[i] + ' add ' + data.nick + ' +V')
         }
         bot.say(data.nick, 'You have been added to the list of automatic voices in ' + CHANNELS.join(' and ') + '.')
@@ -69,7 +69,7 @@ bot.addListener('notice', function (nick, to, text) {
         storage.saveToDisk()
       } else {
         storage.data.nicks[data.nick].ns = 'UNVERIFIED'
-        for (var j = 0; j > CHANNELS.length; i++) {
+        for (var j = 0; j < CHANNELS.length; j++) {
           bot.say('ChanServ', 'voice ' + CHANNELS[j] + ' ' + data.nick)
           bot.say(data.nick, 'You have been temporarily voiced in ' + CHANNELS[j])
         }
