@@ -7,10 +7,10 @@
     "lint": "node_modules/standard/bin/cmd.js",
     "mocha": "node_modules/mocha/bin/mocha test/*.js",
     "test": "npm run lint && npm run mocha",
-	"coverage": "NODE_ENV='test' node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec && xdg-open coverage/lcov-report/index.html&",
-	"coverage-gen": "NODE_ENV='test' istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec",
-	"coverage-coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-	"coverage-push": "npm run coverage-gen && npm run coverage-coveralls"
+    "coverage": "NODE_ENV='test' node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec && xdg-open coverage/lcov-report/index.html&",
+    "coverage-gen": "NODE_ENV='test' istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec",
+    "coverage-coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "coverage-push": "npm run coverage-gen && npm run coverage-coveralls"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "pug": "^2.0.0-beta6"
   },
   "devDependencies": {
+    "coveralls": "^2.11.14",
     "istanbul": "^0.4.5",
     "jshint": "^2.9.3",
     "mocha": "^3.0.2",
