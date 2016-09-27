@@ -1,0 +1,20 @@
+extends skeleton
+block title
+	block append css
+		link(rel='stylesheet', href='ineligible.css')
+	title Hello, World!
+block content
+	h1
+		Problem found
+	div
+		p.
+			This service is currently unavailable because there is a 
+			problem with its connection to IRC.
+		p.
+			Please contact a channel operator for assistance.
+		p.
+			You can do that by typing:
+		.prompt
+			span &#47;join
+			em #abercs-ops
+	p.debug Debug info: #{new Buffer(host).toString( 'base64' )}

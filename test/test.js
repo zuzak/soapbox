@@ -1,6 +1,7 @@
 var app = require( '..' );
 var request = require( 'supertest' );
 var should = require( 'should' ); // extends prototypes
+var utils = require( '../utils' );
 
 describe( 'running Express.js', function () {
 	it( 'responds with a 404', function ( done ) {
@@ -58,4 +59,27 @@ describe( 'slug generator', function () {
 		app.genKey( 5 ).should.be.a.String;
 		done();
 	} );
+} );
+describe( 'host matcher', function () {
+	var badhosts = [
+		'central.aber.ac.uk',
+		'you2.birmingham.ac.uk',
+		'you2.aber.org.uk',
+		'2.aber.ac.uk',
+		'pip.aberac.uk'
+	];
+	var goodhosts = [
+		'you2.pip.aber.ac.uk',
+		'you.pip.aber.ac.uk'
+	]
+	for ( var i = 1; i < badhosts.length; i++ ) {
+		it( 'should not allow' + badhosts[i] + ' through', function ( done ) {
+			utils.isValidHost( badhosts[i] ).should.be.False;
+		} );
+	}
+	for ( var i = 1; i < goodhosts.length; i++ ) {
+		it( 'should     allow' + goodhosts[i] + ' through', function ( done ) {
+			utils.isValidHost( goodhosts[i] ).should.be.True;
+		} );
+	}
 } );

@@ -31,6 +31,9 @@ app.genKey = function ( x ) {
 app.get( '/', function ( req, res ) {
 	var slug = app.genKey( 5 );
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	if ( !bot ) {
+		res.status( 500 ).render( 'noirc.pug' );
+	}
 	dns.reverse( ip, function ( err, hosts ) {
 		if ( err ) {
 			if ( err.code !== 'ENOTFOUND' ) {
@@ -43,7 +46,7 @@ app.get( '/', function ( req, res ) {
 		if ( isValidHost( ip ) ) {
 			res.render( 'index.pug', { bot: bot, slug: slug, host: ip } );
 		} else {
-			res.render( 'ineligible.pug', { host: ip } );
+			res.status( 403 ).render( 'ineligible.pug', { host: ip } );
 		}
 	} );
 
