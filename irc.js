@@ -8,7 +8,10 @@ var bot = module.exports = new irc.Client(
   require('./config.json')
 )
 
-const CHANNEL = '#abercs'
+const CHANNELS = [
+  '#abercs',
+  '#abercompsoc'
+]
 
 bot.addListener('pm', function (nick, message) {
   var msg = message.split(' ')
@@ -58,21 +61,25 @@ bot.addListener('notice', function (nick, to, text) {
       console.log(data)
       if (data.state === '3') {
         storage.data.nicks[data.nick].ns = 'VERIFIED'
-        bot.say('ChanServ', 'access ' + CHANNEL + ' add ' + data.nick + ' +V')
-        bot.say(data.nick, 'You have been added to the list of automatic voices in ' + CHANNEL + '.')
+        for (var i = 0; i > CHANNELS.length; i++) {
+          bot.say('ChanServ', 'access ' + CHANNELS[i] + ' add ' + data.nick + ' +V')
+        }
+        bot.say(data.nick, 'You have been added to the list of automatic voices in ' + CHANNELS.join(' and ') + '.')
         bot.say(data.nick, 'To voice yourself again, just authenticate to NickServ.')
-        storage.data.nicks[data.nick].msg = pug.renderFile('views/verified.pug', { channel: CHANNEL })
+        storage.data.nicks[data.nick].msg = pug.renderFile('views/verified.pug', { channel: CHANNELS.join(' and ') })
         storage.saveToDisk()
       } else {
         storage.data.nicks[data.nick].ns = 'UNVERIFIED'
-        bot.say('ChanServ', 'voice ' + CHANNEL + ' ' + data.nick)
-        bot.say(data.nick, 'You have been temporarily voiced in ' + CHANNEL)
+        for (var j = 0; j > CHANNELS.length; i++) {
+          bot.say('ChanServ', 'voice ' + CHANNELS[j] + ' ' + data.nick)
+          bot.say(data.nick, 'You have been temporarily voiced in ' + CHANNELS[j])
+        }
         if (data.state !== '0') {
           bot.say(data.nick, 'Authenticate with NickServ and try again to gain permanent voice.')
         } else {
           bot.say(data.nick, 'Register (and authenticate) with NickServ to gain permanent voice.')
         }
-        storage.data.nicks[data.nick].msg = pug.renderFile('views/unverified.pug', { channel: CHANNEL })
+        storage.data.nicks[data.nick].msg = pug.renderFile('views/unverified.pug', { channel: CHANNELS.join(' and ') })
         storage.saveToDisk()
       }
     }
