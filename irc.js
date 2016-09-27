@@ -2,10 +2,22 @@ var irc = require('irc')
 var storage = require('./storage')
 var isValidHost = require('./utils').isValidHost
 var pug = require('pug')
+
+var config
+try {
+  config = require('./config.json')
+} catch (e) {
+  if (e.code !== 'MODULE_NOT_FOUND') {
+    throw e
+  } else {
+    console.log('(no IRC config found')
+    config = {}
+  }
+}
 var bot = module.exports = new irc.Client(
   'chat.freenode.net',
   'myfanwy',
-  require('./config.json')
+  config
 )
 
 const CHANNELS = [
