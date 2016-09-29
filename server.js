@@ -64,7 +64,12 @@ app.get('/privacy', function (req, res) {
   res.render('privacy.pug')
 })
 
-app.listen(3000)
+if (app.get('env') === 'test') {
+  // allow tests to run simultaneously to normal server
+  app.listen(5000)
+} else {
+  app.listen(3000)
+}
 
 process.on('SIGINT', function () {
   console.log('Caught ^C, exiting')
